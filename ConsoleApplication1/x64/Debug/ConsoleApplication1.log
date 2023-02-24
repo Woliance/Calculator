@@ -1,0 +1,17 @@
+﻿  calculator.cpp
+  ConsoleApplication1.cpp
+  string_calculator.cpp
+D:\Program Files (x86)\Calculator\ConsoleApplication1\string_calculator.cpp(176,2): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\Program Files (x86)\Calculator\ConsoleApplication1\string_calculator.cpp(201,12): error C3861: 'to_string': identifier not found
+D:\Program Files (x86)\Calculator\ConsoleApplication1\string_calculator.cpp(205,18): error C3861: 'min': identifier not found
+D:\Program Files (x86)\Calculator\ConsoleApplication1\string_calculator.cpp(239,2): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\Program Files (x86)\Calculator\ConsoleApplication1\string_calculator.cpp(241,3): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\Program Files (x86)\Calculator\ConsoleApplication1\string_calculator.cpp(272,28): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  WholeNumber.cpp
+D:\Program Files (x86)\Calculator\ConsoleApplication1\WholeNumber.cpp(36,31): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\Program Files (x86)\Calculator\ConsoleApplication1\WholeNumber.cpp(37,35): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\Program Files (x86)\Calculator\ConsoleApplication1\WholeNumber.cpp(59,31): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\Program Files (x86)\Calculator\ConsoleApplication1\WholeNumber.cpp(60,35): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...
+D:\Program Files (x86)\Calculator\ConsoleApplication1\WholeNumber.cpp(86): error C4716: 'WholeNumber::operator*': must return a value
+D:\Program Files (x86)\Calculator\ConsoleApplication1\WholeNumber.cpp(90): error C4716: 'WholeNumber::operator/': must return a value
