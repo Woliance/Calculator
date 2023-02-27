@@ -385,7 +385,7 @@ bool compare (string lhs, string rhs) { // true if lhs > rhs
 
 string division(string dividend, string divisor) {
 	if (divisor == "0")
-		throw std::invalid_argument("Error: Division by 0.");
+		return "0";
 	if (dividend == "0")
 		return "0";
 	string quotient = ""; // result

@@ -3,6 +3,8 @@
 /ConsoleApplication1/**
 /ConsoleApplication1/.vs/**
 /ConsoleApplication1/x64/**
+ConsoleApplication1/x64
+ConsoleApplication1/x64/*
 *.log
 *.user
 *.cmake
@@ -11,10 +13,9 @@
 *.exe
 *.iobj
 *.ipdb
-ConsoleApplication1/x64/Release/ConsoleA.37f22378.tlog/CL.write.1.tlog
-ConsoleApplication1/x64/Release/ConsoleA.37f22378.tlog/CL.read.1.tlog
-ConsoleApplication1/x64/Release/ConsoleA.37f22378.tlog/CL.command.1.tlog
-ConsoleApplication1/x64/Release/ConsoleA.37f22378.tlog/link.command.1.tlog
-ConsoleApplication1/x64/Release/ConsoleA.37f22378.tlog/link.read.1.tlog
-ConsoleApplication1/x64/Release/ConsoleA.37f22378.tlog/link.write.1.tlog
-ConsoleApplication1/.vs/ConsoleApplication1/FileContentIndex/*
+CalculatorGui/CMakeLists.txt.user
+ConsoleApplication1/.vs/ConsoleApplication1/v17/.suo
+ConsoleApplication1/.vs/ConsoleApplication1/v17/Browse.VC.db
+ConsoleApplication1/.vs/ConsoleApplication1/v17/ipch/AutoPCH/66e614b7ebd11083/STRING_CALCULATOR.ipch
+ConsoleApplication1/.vs/ConsoleApplication1/v17/ipch/AutoPCH/81076b2fb4bb97e1/CALCULATOR.ipch
+ConsoleApplication1/.vs/ConsoleApplication1/v17/ipch/AutoPCH/819f1f5d3607d1d5/CONSOLEAPPLICATION1.ipch
