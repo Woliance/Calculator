@@ -24,18 +24,12 @@
     <ClCompile Include="string_calculator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WholeNumber.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="calculator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="string_calculator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WholeNumber.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

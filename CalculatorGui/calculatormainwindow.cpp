@@ -87,6 +87,7 @@ void CalculatorMainWindow::stopProcess() {
 
 CalculatorMainWindow::~CalculatorMainWindow()
 {
+    process.kill();
     delete ui;
 }
 

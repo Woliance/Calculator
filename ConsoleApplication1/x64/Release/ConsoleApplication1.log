@@ -1,11 +1,7 @@
-﻿  string_calculator.cpp
-D:\Program Files (x86)\Calculator\ConsoleApplication1\string_calculator.cpp(169,2): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-D:\Program Files (x86)\Calculator\ConsoleApplication1\string_calculator.cpp(232,2): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-D:\Program Files (x86)\Calculator\ConsoleApplication1\string_calculator.cpp(235,3): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-D:\Program Files (x86)\Calculator\ConsoleApplication1\string_calculator.cpp(249,30): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+﻿  ConsoleApplication1.cpp
   Generating code
-  0 of 465 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  6 of 418 functions ( 1.4%) were compiled, the rest were copied from previous compilation.
+    5 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   ConsoleApplication1.vcxproj -> D:\Program Files (x86)\Calculator\ConsoleApplication1\x64\Release\ConsoleApplication1.exe

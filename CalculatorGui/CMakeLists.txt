@@ -13,14 +13,10 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
-        main.cpp
         calculatormainwindow.cpp
-        calculator.cpp
-        calculator.h
-        string_calculator.cpp
-        string_calculator.h
         calculatormainwindow.h
         calculatormainwindow.ui
+        main.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

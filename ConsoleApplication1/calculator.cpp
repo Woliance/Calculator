@@ -7,7 +7,7 @@
 
 using std::cout, std::endl, std::string, std::stack, std::istringstream;
 
-int precedence(char c) {
+int precedence (char c) {
     if (c == '/')
         return 4;
     else if (c == '*')
@@ -18,13 +18,13 @@ int precedence(char c) {
         return 1;
 }
 
-bool isOperator(char c) {
+bool isOperator (char c) {
     if (c == '/' || c == '*' || c == '+' || c == '-')
         return true;
     return false;
 }
 
-bool validate(string s) {
+bool validate (string s) {
     if (s == "()")
         return false;
     stack<char> parenStack;
@@ -33,7 +33,7 @@ bool validate(string s) {
         if (s.at(i) == '(')
             parenStack.push(s.at(i));
         else if (s.at(i) == ')')
-        {
+        {    
             if (parenStack.empty())
                 return false;
             parenStack.pop();
@@ -43,13 +43,13 @@ bool validate(string s) {
         return false;
     for (size_t i = 0; i < s.length(); i++)
     {
-        if (!isOperator(s.at(i)) && s.at(i) != ')' && s.at(i) != '(' && !isdigit(s.at(i)) && s.at(i) != '.')
-            return false;
+        if (!isOperator(s.at(i)) && s.at(i) != ')' && s.at(i) != '(' && !isdigit(s.at(i)))
+            return false;  
     }
     return true;
 }
 
-string postfix(string s) { // Implement error checking for only (
+string postfix (string s) { // Implement error checking for only (
     stack<char> theStack;
     string answer;
     char c;
@@ -65,21 +65,20 @@ string postfix(string s) { // Implement error checking for only (
         }
         else if (c == ')')
         {
-            if (theStack.empty())
-                throw std::invalid_argument("Invalid expression: Unbalanced parentheses");
             while (theStack.top() != '(')
             {
                 answer.push_back(theStack.top());
                 answer.push_back(' ');
                 theStack.pop();
-                if (theStack.empty())
-                    throw std::invalid_argument("Invalid expression: Unbalanced parentheses");
             }
             theStack.pop();
             i++;
         }
-        else if (!isOperator(c) || (c == '-' && i != 0 && s.at(i - 1) == '(') || (i == 0 && c == '-') || (c == '-' && i != 0 && isOperator(s.at(i - 1))))
-        {
+        else if ( !isOperator(c) || 
+        ( c == '-' && i != 0 && s.at(i-1) == '(') || 
+        ( i == 0 && c == '-' ) ||
+        ( c == '-' && i != 0 && isOperator(s.at(i-1))) )
+        {    
             answer.push_back(s.at(i));
             i++;
             while (i < sentinel && s.at(i) != ')' && !isOperator(s.at(i)))
@@ -103,8 +102,6 @@ string postfix(string s) { // Implement error checking for only (
     }
     while (!theStack.empty())
     {
-        if (theStack.top() == '(')
-            throw std::invalid_argument("Invalid expression: Unbalanced parentheses");
         answer.push_back(theStack.top());
         answer.push_back(' ');
         theStack.pop();
@@ -112,108 +109,126 @@ string postfix(string s) { // Implement error checking for only (
     return answer;
 }
 
-string standardize(string s) {
-    // Replace multiple spaces with a single space
-    size_t i = 0;
-    while (i < s.length()) {
-        if (s[i] == ' ') {
-            size_t j = i + 1;
-            while (j < s.length() && s[j] == ' ') {
-                j++;
-            }
-            s.erase(i, j - i - 1);
-        }
-        i++;
+string standardize (string s) // makes it so each infix has only 1 space in between
+{
+    // first, if it has spaces, make it not have spaces
+    string noSpaceResult = "";
+    for (size_t i = 0; i < s.length(); i++)
+    {
+        if (s.at(i) != ' ')
+            noSpaceResult.push_back(s.at(i));
     }
-    return s;
+    return noSpaceResult;
 }
 
-string calculate(string s) {
+string calculate (string s) {
     string result = "";
     string lhs;
     string rhs;
     string parse;
-    istringstream iss(s);
+    istringstream iss (s);
     stack<string> theStack;
-    while (iss >> parse) {
-        if (parse.length() != 1 || !isOperator(parse[0])) { // is operand
+    while (iss >> parse)
+    {
+        if (parse.length() != 1 || !isOperator(parse.at(0))) // is operand
+        {
             theStack.push(parse);
         }
-        else if (isOperator(parse[0]) && parse.length() == 1) { // is one of the 5 operators
-            switch (parse[0]) {
-            case '+':
-                if (theStack.empty()) {
-                    throw std::invalid_argument("Invalid expression.");
-                }
-                rhs = theStack.top();
-                theStack.pop();
-                if (theStack.empty()) {
-                    throw std::invalid_argument("Invalid expression.");
-                }
-                lhs = theStack.top();
-                theStack.pop();
-                theStack.push(add(lhs, rhs));
-                break;
-            case '-':
-                if (theStack.empty()) {
-                    throw std::invalid_argument("Invalid expression.");
-                }
-                rhs = theStack.top();
-                theStack.pop();
-                if (theStack.empty()) {
-                    throw std::invalid_argument("Invalid expression.");
-                }
-                lhs = theStack.top();
-                theStack.pop();
-                theStack.push(subtract(lhs, rhs));
-                break;
-            case '*':
-                if (theStack.empty()) {
-                    throw std::invalid_argument("Invalid expression.");
-                }
-                rhs = theStack.top();
-                theStack.pop();
-                if (theStack.empty()) {
-                    throw std::invalid_argument("Invalid expression.");
-                }
-                lhs = theStack.top();
-                theStack.pop();
-                theStack.push(multiply(lhs, rhs));
-                break;
-            case '/':
-                if (theStack.empty()) {
-                    throw std::invalid_argument("Invalid expression.");
-                }
-                rhs = theStack.top();
-                theStack.pop();
-                if (theStack.empty()) {
-                    throw std::invalid_argument("Invalid expression.");
-                }
-                lhs = theStack.top();
-                theStack.pop();
-                theStack.push(division(lhs, rhs));
-                break;
-            case '%':
-                if (theStack.empty()) {
-                    throw std::invalid_argument("Invalid expression.");
-                }
-                rhs = theStack.top();
-                theStack.pop();
-                if (theStack.empty()) {
-                    throw std::invalid_argument("Invalid expression.");
-                }
-                lhs = theStack.top();
-                theStack.pop();
-                theStack.push(modulus(lhs, rhs));
-                break;
-            default:
-                cout << "[ERROR] invalid operator: " << parse[0] << endl;
-                break;
-            }
+        else if (isOperator(parse.at(0)) && parse.length() == 1) // is one of the 4 functions
+        {
+            switch (parse.at(0))
+			{
+				case '+': 
+                    if (theStack.empty()) // occurs if there's not another operand
+                    {
+                        throw std::invalid_argument("Invalid expression.");
+                    }
+					rhs = theStack.top(); 
+                    theStack.pop();
+                    if (theStack.empty())
+                    {
+                        throw std::invalid_argument("Invalid expression.");
+                    }
+					lhs = theStack.top();
+                    theStack.pop();
+                    //cout << "lhs: " << lhs << endl;
+                    //cout << "rhs: " << rhs << endl;
+					theStack.push(add(lhs,rhs));
+					break;
+				case '-':
+                    if (theStack.empty())
+                    {
+                        throw std::invalid_argument("Invalid expression.");
+                    }
+					rhs = theStack.top(); 
+                    theStack.pop();
+                    if (theStack.empty())
+                    {
+                        throw std::invalid_argument("Invalid expression.");
+                    }
+					lhs = theStack.top();
+                    theStack.pop();
+                    //cout << "lhs: " << lhs << endl;
+                    //cout << "rhs: " << rhs << endl;
+					theStack.push(subtract(lhs,rhs));
+					break;
+				case '*':
+                    if (theStack.empty())
+                    {
+                        throw std::invalid_argument("Invalid expression.");
+                    }
+					rhs = theStack.top(); 
+                    theStack.pop();
+                    if (theStack.empty())
+                    {
+                        throw std::invalid_argument("Invalid expression.");
+                    }
+					lhs = theStack.top();
+                    theStack.pop();
+                    //cout << "lhs: " << lhs << endl;
+                    //cout << "rhs: " << rhs << endl;
+					theStack.push(multiply(lhs,rhs));
+					break;
+				case '/':
+                    if (theStack.empty())
+                    {
+                        throw std::invalid_argument("Invalid expression.");
+                    }
+					rhs = theStack.top();
+                    theStack.pop();
+                    if (theStack.empty())
+                    {
+                        throw std::invalid_argument("Invalid expression.");
+                    }
+					lhs = theStack.top();
+                    theStack.pop();
+                    //cout << "lhs: " << lhs << endl;
+                    //cout << "rhs: " << rhs << endl;
+					theStack.push(division(lhs,rhs));
+					break;
+                case '%':
+                    if (theStack.empty())
+                    {
+                        throw std::invalid_argument("Invalid expression.");
+                    }
+					rhs = theStack.top(); 
+                    theStack.pop();
+                    if (theStack.empty())
+                    {
+                        throw std::invalid_argument("Invalid expression.");
+                    }
+					lhs = theStack.top();
+                    theStack.pop();
+                    //cout << "lhs: " << lhs << endl;
+                    //cout << "rhs: " << rhs << endl;
+					theStack.push(modulus(lhs,rhs));
+					break;
+				default: 
+					cout << "[ERROR] invalid operator: " << parse.at(0) << endl;
+					break;
+			}
         }
-    }
-    if (theStack.empty()) {
-        throw std::invalid_argument("Invalid expression.");
     }
     return theStack.top();
 }
+
