@@ -57,103 +57,38 @@ string add(string lhs, string rhs) {
 	int rightSide = 0;
 	int sumOfLeftAndRight = 0;
 	string result = "";
-	
-	// Condition variables
 	bool carryOverExists = true;
 	bool negFound = false;
-	
-	// Iteration variables
-	int leftIterate = lhs.length()-1;
-	int rightIterate = rhs.length()-1;
 
-	// Dealing with negatives
-
-	if( (lhs.find('-') != string::npos && rhs.find('-') != string::npos) ||  // both are negative
-		(rhs.find('-') != string::npos && lhs.find('0') == 0) ||  // right is negative, left is 0
-		(lhs.find('-') != string::npos && rhs.find('0') == 0) // right is 0, left is negative
-	  ) 
-	{ 
-		lhs.erase(0,1);  // deletes negative sign so digit to decimal will have no issues
-		rhs.erase(0,1);
-		negFound = true;  // marked as a negative number so it will be added back at the end
-		leftIterate -= 1;  // accounts for deleted part, length has to be subtract 1 or be out of range
-		rightIterate -= 1;
-	}
-	else if (lhs.find('-') != string::npos && rhs.find('-') == string::npos) // if left is neg and right is not
-	{
-		lhs.erase(0,1);
-		result = subtract(lhs,rhs);
-		if ((lhs.length() == rhs.length() && rhs > lhs) || lhs.length() < rhs.length())
-			result.erase(0,1);
-		else
-			result.insert(0,"-");
-		return trim_leading_zeros(result);
-	}
-
-	else if (lhs.find('-') == string::npos && rhs.find('-') != string::npos) // left is positive and right is negative, simply subtract
-	{ 
-		rhs.erase(0,1);
-		result = subtract(lhs,rhs);
-		if ((lhs.length() == rhs.length() && rhs < lhs) || lhs.length() > rhs.length()) // conditions for the result to be positive
-		{
-			if (result.find('-') != string::npos)
-				result.erase(0,1);
-		} 
+	// Base case: return result if both lhs and rhs are empty strings
+	if (lhs.empty() && rhs.empty()) {
 		return result;
 	}
 
-	while (carryOverExists) {
-		if (leftIterate >= 0) // if the left iteration is not negative (not out of range), then we grab the furthest right number available
-		{  
-			leftSide = digit_to_decimal(lhs.at(leftIterate));
-		}
-		if (rightIterate >= 0) 
-		{
-			rightSide = digit_to_decimal(rhs.at(rightIterate));
-		}
-		if (leftIterate < 0) // if left iteration goes below 0, left side will always be 0 (no numbers there)
-		{
-			leftSide = 0;
-		} 
-		if (rightIterate < 0) 
-		{
-			rightSide = 0;
-		}
-		sumOfLeftAndRight = leftSide + rightSide + carryOver; // carry over is 1, added on, if not then it is 0
-		carryOver = 0; // resets carry over for next iteration
-		
-		if (sumOfLeftAndRight >= 10) // if the sum is greater than 10, then there is a carry over
-		{
-			sumOfLeftAndRight = sumOfLeftAndRight % 10;
-			result += decimal_to_digit(sumOfLeftAndRight);
-			carryOver = 1;
-		} 
-		else if (leftIterate < 0 && rightIterate < 0) // if both iterations are less than 0, there's nothing left in the strings
-		{
-			carryOverExists = false;  // ends the loop
-			result += decimal_to_digit(sumOfLeftAndRight);
-		} 
-		else // only one is less than 0 or both still have some to go
-		{
-			result += decimal_to_digit(sumOfLeftAndRight);
-		}
-		leftIterate -= 1; // iterates through left string
-		rightIterate -= 1;
+	// Get the last digit of each number
+	if (!lhs.empty()) {
+		leftSide = lhs.back() - '0';
+		lhs.pop_back();
 	}
-    string finalResult = "";
-	int i = result.length() - 1; // result string is currently backwards due to push_back, this will mirror it
-	while (i >= 0)
-	{
-		finalResult += result.at(i);
-		i -= 1;
+	if (!rhs.empty()) {
+		rightSide = rhs.back() - '0';
+		rhs.pop_back();
 	}
-	finalResult = trim_leading_zeros(finalResult);
-	if (negFound) // if a negative existed before, we simply slap it back in 
-	{
-		finalResult.insert(0,"-");
-	}
-	return finalResult;
+
+	// Add the digits and carry over if necessary
+	sumOfLeftAndRight = leftSide + rightSide + carryOver;
+	carryOver = sumOfLeftAndRight / 10;
+	sumOfLeftAndRight %= 10;
+
+	// Add the sum of the digits to the result string
+	result.insert(0, std::to_string(sumOfLeftAndRight));
+
+	// Recursively call add() with the remaining digits
+	result = add(lhs, rhs) + result;
+
+	return result;
 }
+
 
 string subtract(string lhs, string rhs) {
     // Important variables

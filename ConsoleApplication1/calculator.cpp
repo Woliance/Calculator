@@ -18,36 +18,44 @@ int precedence (char c) {
         return 1;
 }
 
-bool isOperator (char c) {
+bool isOperator(char c) {
     if (c == '/' || c == '*' || c == '+' || c == '-')
         return true;
     return false;
 }
 
-bool validate (string s) {
+bool validate(string s) {
     if (s == "()")
         return false;
     stack<char> parenStack;
+    bool hasDigit = false; // flag to ensure there is at least one digit in the input
+    bool hasDecimal = false; // flag to ensure there is at most one decimal point in the input
     for (size_t i = 0; i < s.length(); i++)
     {
         if (s.at(i) == '(')
             parenStack.push(s.at(i));
         else if (s.at(i) == ')')
-        {    
+        {
             if (parenStack.empty())
                 return false;
             parenStack.pop();
         }
+        else if (!isOperator(s.at(i)) && s.at(i) != ')' && s.at(i) != '(' && !isdigit(s.at(i)) && s.at(i) != '.')
+            return false;
+        else if (s.at(i) == '.')
+        {
+            if (hasDecimal)
+                return false;
+            hasDecimal = true;
+        }
+        else if (isdigit(s.at(i))) // update the flag if a digit is encountered
+            hasDigit = true;
     }
     if (!parenStack.empty())
         return false;
-    for (size_t i = 0; i < s.length(); i++)
-    {
-        if (!isOperator(s.at(i)) && s.at(i) != ')' && s.at(i) != '(' && !isdigit(s.at(i)))
-            return false;  
-    }
-    return true;
+    return hasDigit; // return false if there are no digits in the input
 }
+
 
 string postfix (string s) { // Implement error checking for only (
     stack<char> theStack;
@@ -121,114 +129,64 @@ string standardize (string s) // makes it so each infix has only 1 space in betw
     return noSpaceResult;
 }
 
-string calculate (string s) {
-    string result = "";
-    string lhs;
-    string rhs;
-    string parse;
-    istringstream iss (s);
-    stack<string> theStack;
-    while (iss >> parse)
-    {
-        if (parse.length() != 1 || !isOperator(parse.at(0))) // is operand
-        {
-            theStack.push(parse);
+#include <stack>
+#include <sstream>
+
+double calculate(std::string s) {
+    std::stack<double> operands;
+    std::istringstream iss(s);
+    std::string token;
+    while (iss >> token) {
+        if (isOperator(token[0])) {
+            double operand2 = operands.top();
+            operands.pop();
+            double operand1 = operands.top();
+            operands.pop();
+            switch (token[0]) {
+            case '+': operands.push(operand1 + operand2); break;
+            case '-': operands.push(operand1 - operand2); break;
+            case '*': operands.push(operand1 * operand2); break;
+            case '/': operands.push(operand1 / operand2); break;
+            }
         }
-        else if (isOperator(parse.at(0)) && parse.length() == 1) // is one of the 4 functions
-        {
-            switch (parse.at(0))
-			{
-				case '+': 
-                    if (theStack.empty()) // occurs if there's not another operand
-                    {
-                        throw std::invalid_argument("Invalid expression.");
+        double calculate(std::string s); {
+            std::stack<double> operands;
+            std::istringstream iss(s);
+            std::string token;
+            while (iss >> token) {
+                if (isOperator(token[0])) {
+                    double operand2 = operands.top();
+                    operands.pop();
+                    double operand1 = operands.top();
+                    operands.pop();
+                    switch (token[0]) {
+                    case '+': operands.push(operand1 + operand2); break;
+                    case '-': operands.push(operand1 - operand2); break;
+                    case '*': operands.push(operand1 * operand2); break;
+                    case '/': operands.push(operand1 / operand2); break;
                     }
-					rhs = theStack.top(); 
-                    theStack.pop();
-                    if (theStack.empty())
-                    {
-                        throw std::invalid_argument("Invalid expression.");
+                }
+                else {
+                    // Check if the token contains a decimal point
+                    if (token.find('.') != std::string::npos) {
+                        // Token contains a decimal point, so use stod to convert directly to double
+                        operands.push(std::stod(token));
                     }
-					lhs = theStack.top();
-                    theStack.pop();
-                    //cout << "lhs: " << lhs << endl;
-                    //cout << "rhs: " << rhs << endl;
-					theStack.push(add(lhs,rhs));
-					break;
-				case '-':
-                    if (theStack.empty())
-                    {
-                        throw std::invalid_argument("Invalid expression.");
+                    else {
+                        // Token does not contain a decimal point, so convert to int first and then to double
+                        operands.push(static_cast<double>(std::stoi(token)));
                     }
-					rhs = theStack.top(); 
-                    theStack.pop();
-                    if (theStack.empty())
-                    {
-                        throw std::invalid_argument("Invalid expression.");
-                    }
-					lhs = theStack.top();
-                    theStack.pop();
-                    //cout << "lhs: " << lhs << endl;
-                    //cout << "rhs: " << rhs << endl;
-					theStack.push(subtract(lhs,rhs));
-					break;
-				case '*':
-                    if (theStack.empty())
-                    {
-                        throw std::invalid_argument("Invalid expression.");
-                    }
-					rhs = theStack.top(); 
-                    theStack.pop();
-                    if (theStack.empty())
-                    {
-                        throw std::invalid_argument("Invalid expression.");
-                    }
-					lhs = theStack.top();
-                    theStack.pop();
-                    //cout << "lhs: " << lhs << endl;
-                    //cout << "rhs: " << rhs << endl;
-					theStack.push(multiply(lhs,rhs));
-					break;
-				case '/':
-                    if (theStack.empty())
-                    {
-                        throw std::invalid_argument("Invalid expression.");
-                    }
-					rhs = theStack.top();
-                    theStack.pop();
-                    if (theStack.empty())
-                    {
-                        throw std::invalid_argument("Invalid expression.");
-                    }
-					lhs = theStack.top();
-                    theStack.pop();
-                    //cout << "lhs: " << lhs << endl;
-                    //cout << "rhs: " << rhs << endl;
-					theStack.push(division(lhs,rhs));
-					break;
-                case '%':
-                    if (theStack.empty())
-                    {
-                        throw std::invalid_argument("Invalid expression.");
-                    }
-					rhs = theStack.top(); 
-                    theStack.pop();
-                    if (theStack.empty())
-                    {
-                        throw std::invalid_argument("Invalid expression.");
-                    }
-					lhs = theStack.top();
-                    theStack.pop();
-                    //cout << "lhs: " << lhs << endl;
-                    //cout << "rhs: " << rhs << endl;
-					theStack.push(modulus(lhs,rhs));
-					break;
-				default: 
-					cout << "[ERROR] invalid operator: " << parse.at(0) << endl;
-					break;
-			}
+                }
+            }
+            if (operands.size() != 1) {
+                throw std::invalid_argument("Invalid expression aaaaaaaaa");
+            }
+            return operands.top();
         }
     }
-    return theStack.top();
+    if (operands.size() != 1) {
+        throw std::invalid_argument("Invalid expression Multiple operands");
+    }
+    return operands.top();
 }
 

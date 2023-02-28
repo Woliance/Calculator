@@ -49,6 +49,6 @@ input: s - a string representing an expression, e.g. '(1+2)'
 output: the result of the arithmetic expression, e.g. '3'
 throws: std::invalid_argument if the expression is incomplete, e.g. '(1+)'
 */
-std::string calculate (std::string s);
+double calculate (std::string s);
 
 #endif  // CALCULATOR_H
