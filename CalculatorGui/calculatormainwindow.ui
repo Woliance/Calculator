@@ -11,7 +11,19 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>CalculatorMainWindow</string>
+   <string>Calculator</string>
+  </property>
+  <property name="windowOpacity">
+   <double>0.000000000000000</double>
+  </property>
+  <property name="documentMode">
+   <bool>false</bool>
+  </property>
+  <property name="dockNestingEnabled">
+   <bool>false</bool>
+  </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTextBrowser" name="outputTextEdit">
@@ -35,23 +47,6 @@
     </property>
    </widget>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>489</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuColour">
-    <property name="title">
-     <string>Colour</string>
-    </property>
-   </widget>
-   <addaction name="menuColour"/>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>

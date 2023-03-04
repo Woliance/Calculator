@@ -38,7 +38,8 @@ int main() {
             fullExpression = standardize(userInput);
             if (!validate(fullExpression))
             {
-                cout << "Invalid expression. Try again: 1234123 \n>>  ";
+
+                cout << "Invalid expression. Try again:\n>>  ";
                 continue;
             }
             fullExpression = postfix(fullExpression);

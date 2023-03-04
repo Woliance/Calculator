@@ -28,8 +28,8 @@ bool validate(string s) {
     if (s == "()")
         return false;
     stack<char> parenStack;
-    bool hasDigit = false; // flag to ensure there is at least one digit in the input
-    bool hasDecimal = false; // flag to ensure there is at most one decimal point in the input
+    bool hasDigit = false;
+    int numDecimalPoints = 0;
     for (size_t i = 0; i < s.length(); i++)
     {
         if (s.at(i) == '(')
@@ -41,23 +41,46 @@ bool validate(string s) {
             parenStack.pop();
         }
         else if (!isOperator(s.at(i)) && s.at(i) != ')' && s.at(i) != '(' && !isdigit(s.at(i)) && s.at(i) != '.')
+        {
+            numDecimalPoints = 0;
             return false;
+        }
         else if (s.at(i) == '.')
         {
-            if (hasDecimal)
+            if (numDecimalPoints >= 1)
+            {
+                numDecimalPoints = 0;
                 return false;
-            hasDecimal = true;
+            }
+            numDecimalPoints++;
         }
-        else if (isdigit(s.at(i))) // update the flag if a digit is encountered
+        else if (isdigit(s.at(i)))
+        {
             hasDigit = true;
+            while (i < s.length() && (isdigit(s.at(i)) || s.at(i) == '.'))
+            {
+                if (s.at(i) == '.')
+                {
+                    if (numDecimalPoints >= 1)
+                    {
+                        numDecimalPoints = 0;
+                        return false;
+                    }
+                    numDecimalPoints++;
+                }
+                i++;
+            }
+            i--;
+            numDecimalPoints = 0;
+        }
     }
     if (!parenStack.empty())
         return false;
-    return hasDigit; // return false if there are no digits in the input
+    return hasDigit;
 }
 
 
-string postfix (string s) { // Implement error checking for only (
+string postfix(string s) {
     stack<char> theStack;
     string answer;
     char c;
@@ -78,16 +101,18 @@ string postfix (string s) { // Implement error checking for only (
                 answer.push_back(theStack.top());
                 answer.push_back(' ');
                 theStack.pop();
+                if (theStack.empty()) // fix error in case of mismatched parentheses
+                    return "error: mismatched parentheses";
             }
             theStack.pop();
             i++;
         }
-        else if ( !isOperator(c) || 
-        ( c == '-' && i != 0 && s.at(i-1) == '(') || 
-        ( i == 0 && c == '-' ) ||
-        ( c == '-' && i != 0 && isOperator(s.at(i-1))) )
-        {    
-            answer.push_back(s.at(i));
+        else if (!isOperator(c) ||
+            (c == '-' && i != 0 && s.at(i - 1) == '(') ||
+            (i == 0 && c == '-') ||
+            (c == '-' && i != 0 && isOperator(s.at(i - 1))))
+        {
+            answer.push_back(c);
             i++;
             while (i < sentinel && s.at(i) != ')' && !isOperator(s.at(i)))
             {
@@ -110,6 +135,8 @@ string postfix (string s) { // Implement error checking for only (
     }
     while (!theStack.empty())
     {
+        if (theStack.top() == '(') // fix error in case of mismatched parentheses
+            return "error: mismatched parentheses";
         answer.push_back(theStack.top());
         answer.push_back(' ');
         theStack.pop();

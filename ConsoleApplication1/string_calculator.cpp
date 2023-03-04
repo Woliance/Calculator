@@ -5,17 +5,19 @@
 using std::cout, std::endl, std::string;
 
 unsigned int digit_to_decimal(char digit) {
-	// char to int
-	if (!isdigit(digit))
-	{
+	if (!isdigit(digit) && digit != '.') {
 		throw std::invalid_argument("Character entered is not a digit.");
+	}
+	if (digit == '.') {
+		// Treat decimal point as a digit with decimal value 10
+		return 10;
 	}
 	return digit - '0';
 }
 
+
 char decimal_to_digit(unsigned int decimal) {
-	if (decimal > 9)
-	{
+	if (decimal > 9) {
 		throw std::invalid_argument("Decimal entered is greater than 9 or less than 0.");
 	}
 	return decimal + '0';
@@ -24,30 +26,22 @@ char decimal_to_digit(unsigned int decimal) {
 string trim_leading_zeros(string num) {
 	bool wasNeg = false;
 	string result = "";
-	if (num.find("-") != string::npos) // Number represented is negative
-	{
+	if (num[0] == '-') {
 		wasNeg = true;
-		num.erase(0,1); // initially delete the negative sign
+		num.erase(0, 1); // initially delete the negative sign
 	}
 	size_t i = 0;
-	while (num.at(i) == '0')
-	{
-		i++;
-		if (i == num.length()) // if the number entered consists soley of 0's
-		{	
-			return "0";
-		}
+	while (i < num.length() && num[i] == '0') {
+		++i;
 	}
-	while (i != num.length())
-	{
-		result += num.at(i);
-		i++;
+	if (i == num.length()) { // if the number entered consists solely of 0's
+		return "0";
 	}
-	if (wasNeg)
-	{
-		result.insert(0,"-");
+	result = num.substr(i);
+	if (wasNeg) {
+		result.insert(0, "-");
 	}
-    return result;
+	return result;
 }
 
 string add(string lhs, string rhs) {
@@ -57,34 +51,36 @@ string add(string lhs, string rhs) {
 	int rightSide = 0;
 	int sumOfLeftAndRight = 0;
 	string result = "";
-	bool carryOverExists = true;
-	bool negFound = false;
 
 	// Base case: return result if both lhs and rhs are empty strings
 	if (lhs.empty() && rhs.empty()) {
 		return result;
 	}
 
-	// Get the last digit of each number
-	if (!lhs.empty()) {
-		leftSide = lhs.back() - '0';
-		lhs.pop_back();
+	// Iterate over the input strings from right to left
+	for (int i = lhs.length() - 1, j = rhs.length() - 1; i >= 0 || j >= 0 || carryOver > 0; i--, j--) {
+		// Get the last digit of each number
+		if (i >= 0) {
+			leftSide = digit_to_decimal(lhs.at(i));
+		}
+		else {
+			leftSide = 0;
+		}
+		if (j >= 0) {
+			rightSide = digit_to_decimal(rhs.at(j));
+		}
+		else {
+			rightSide = 0;
+		}
+
+		// Add the digits and carry over if necessary
+		sumOfLeftAndRight = leftSide + rightSide + carryOver;
+		carryOver = sumOfLeftAndRight / 10;
+		sumOfLeftAndRight %= 10;
+
+		// Add the sum of the digits to the result string
+		result.insert(0, std::to_string(sumOfLeftAndRight));
 	}
-	if (!rhs.empty()) {
-		rightSide = rhs.back() - '0';
-		rhs.pop_back();
-	}
-
-	// Add the digits and carry over if necessary
-	sumOfLeftAndRight = leftSide + rightSide + carryOver;
-	carryOver = sumOfLeftAndRight / 10;
-	sumOfLeftAndRight %= 10;
-
-	// Add the sum of the digits to the result string
-	result.insert(0, std::to_string(sumOfLeftAndRight));
-
-	// Recursively call add() with the remaining digits
-	result = add(lhs, rhs) + result;
 
 	return result;
 }
